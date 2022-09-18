@@ -1,7 +1,7 @@
-# class for transparence any square matrix
-class Transparence:
+# class of matrixes specific algebra
+class MatrixAlgebra:
     @staticmethod
-    def getfor(matrix: list[list[float]]) -> list[list[float]]:
+    def get_transparence(matrix: list[list]) -> list[list]:
         clone = [matrix[i].copy() for i in range(len(matrix))]
 
         for i in range(len(clone)):
@@ -10,20 +10,35 @@ class Transparence:
                 clone[j][i] = matrix[i][j]
         return clone
 
-
-# class for find cofactor for any element in square matrix
-class Cofactor:
     @staticmethod
-    def getforIJ(matrix: list[list[float]], row: int, col: int):
-        minor = Determinant.minor(matrix, row, col)
+    def minor(matrix: list[list], delrow: int, delcol: int) -> list[list]:
+        if delrow >= len(matrix) or delcol >= len(matrix[0]):
+            raise ValueError("Invalid minor indexes")
+
+        clone = [matrix[i].copy() for i in range(len(matrix))]
+
+        for i in range(len(clone)):
+            if i == delrow:
+                 clone.pop(i)
+                 break
+
+        for i in range(len(clone)):
+            for j in range(len(clone[i])):
+                if j == delcol:
+                    clone[i].pop(j)
+                    break
+        return clone
+
+    @staticmethod
+    def cofactor(matrix: list[list], row: int, col: int) -> float:
+        minor = MatrixAlgebra.minor(matrix, row, col)
 
         return (-1)**(row + col) * Determinant.getforMatrix(minor)
-
 
 # class for find inverse matrix to any square matrix
 class InverseMatrix:
     @staticmethod
-    def getfor(matrix: list[list[float]]):
+    def getfor(matrix: list[list[float]]) -> list[list]:
         if Determinant.getforMatrix(matrix) == 0:
             return None
 
@@ -37,11 +52,11 @@ class InverseMatrix:
         for i in range(len(matrix)):
             cofactormatrix.append([])
             for j in range(len(matrix[i])):
-                cofactormatrix[i].append(Cofactor.getforIJ(matrix, i, j))
+                cofactormatrix[i].append(MatrixAlgebra.cofactor(matrix, i, j))
         return cofactormatrix
 
     def getAdjuntMatrix(matrix: list[list[float]]) -> list[list[float]]:
-        return Transparence.getfor(InverseMatrix.getCofactorMatrix(matrix))
+        return MatrixAlgebra.get_transparence(InverseMatrix.getCofactorMatrix(matrix))
 
 
 # class contanining all basic math operations for matrixes
@@ -101,27 +116,11 @@ class Determinant:
         result = 0
         for i in range(len(matrix)):
             if i % 2 == 0:
-                result += matrix[0][i] * Determinant.getforMatrix(Determinant.minor(matrix, 0, i))
+                result += matrix[0][i] * Determinant.getforMatrix(MatrixAlgebra.minor(matrix, 0, i))
             else:
-                result -= matrix[0][i] * Determinant.getforMatrix(Determinant.minor(matrix, 0, i))
+                result -= matrix[0][i] * Determinant.getforMatrix(MatrixAlgebra.minor(matrix, 0, i))
         return result
 
     @staticmethod
     def secondorder(matrix: list[list[float]]) -> float:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-
-    @staticmethod
-    def minor(matrix: list[list[float]], delrow: int, delcol: int) -> list[list[float]]:
-        clone = [matrix[i].copy() for i in range(len(matrix))]
-
-        for i in range(len(clone)):
-            if i == delrow:
-                 clone.pop(i)
-                 break
-
-        for i in range(len(clone)):
-            for j in range(len(clone[i])):
-                if j == delcol:
-                    clone[i].pop(j)
-                    break
-        return clone
