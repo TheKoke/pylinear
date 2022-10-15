@@ -35,6 +35,10 @@ class MatrixAlgebra:
 
         return (-1)**(row + col) * Determinant.getforMatrix(minor)
 
+    @staticmethod
+    def trace(matrix: list[list[float]]) -> float:
+        return sum([matrix[i][i] for i in range(len(matrix))])
+
 # class for find inverse matrix to any square matrix
 class InverseMatrix:
     @staticmethod
