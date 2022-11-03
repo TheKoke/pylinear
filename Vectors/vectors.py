@@ -4,7 +4,7 @@ import setup
 setup.set()
 
 import math
-from MatrixOperations import Determinant, MatrixAlgebra
+from Matrixes.matrixes import Matrix
 
 class Vector:
     def __init__(self, xyz: list[float]) -> None:
@@ -24,8 +24,8 @@ class Vector:
         return sum([self.components[i] * other.components[i] for i in range(len(self.components))])
 
     def crossproduct(self, other: Vector) -> Vector:
-        product_matrix = [[1, 1, 1], self.components, other.components]
-        return Vector([MatrixAlgebra.cofactor(product_matrix, 0, i) for i in range(len(self.components))])
+        product_matrix = Matrix([[1, 1, 1], self.components, other.components])
+        return Vector([product_matrix.cofactor(0, i) for i in range(len(self.components))])
 
     def multiply_to_constant(self, const: float) -> Vector:
         return Vector(list(map(lambda x: x * const, self.components)))
