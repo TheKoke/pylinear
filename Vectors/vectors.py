@@ -29,3 +29,6 @@ class Vector:
 
     def multiply_to_constant(self, const: float) -> Vector:
         return Vector(list(map(lambda x: x * const, self.components)))
+
+    def __str__(self) -> str:
+        return str(self.components)

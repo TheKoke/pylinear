@@ -87,7 +87,7 @@ class Matrix:
         if self.dim != other.dim:
             return None
         
-        result = []
+        result: list[list] = []
         for i in range(other.dim):
             result.append([])
             for j in range(other.dim):
@@ -110,6 +110,9 @@ class Matrix:
         return (-1) ** (row + col) * minor.determinant()
 
     def trace(self) -> float:
+        '''
+        Method for trace of matrix
+        '''
         return sum(self.components[i][i] for i in range(self.dim))
 
     def norm(self) -> float:
@@ -120,3 +123,8 @@ class Matrix:
         for i in range(self.dim):
             rowsums.append(sum(self.components[i][j] ** 2 for j in range(self.dim)))
         return math.sqrt(sum(rowsums))
+
+class Unity(Matrix):
+    def __init__(self, dim: int) -> None:
+        self.dim = dim
+        self.components = [[1 if i == j else 0 for i in range(self.dim)] for j in range(self.dim)]

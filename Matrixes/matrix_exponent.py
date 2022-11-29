@@ -22,7 +22,7 @@ class Taylor:
 
     def powers(self) -> list[Matrix]:
         pows = [self.matrix]
-        for i in range(1, 8):
+        for i in range(1, 5):
             pows.append(pows[i - 1].multiply(self.matrix))
         return pows
 
