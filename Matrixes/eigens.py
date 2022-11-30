@@ -61,6 +61,9 @@ class Jacobi:
     def eigenvectors(self) -> list[Vector]:
         return list(self.eigens().values())
 
+    def __find_anlge(self, i: int, j: int) -> float:
+        pass
+
     def __build_transform(self, i: int, j: int, angle: float) -> Matrix:
         t = [[1 if i == j else 0 for i in range(self.matrix.dim)] for j in range(self.matrix.dim)]
 

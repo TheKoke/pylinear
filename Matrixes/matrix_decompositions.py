@@ -58,11 +58,9 @@ class QRDecomposition:
             en.append(un.multiply_to_constant(1 / un.norm()))
         return en
 
-class Jordan:
-    @staticmethod
-    def get(matrix: Matrix) -> list[Matrix]:
-        '''
-        Returns a three matrices in row-list, where first matrix is U,
-        second and third Jordan matrices J and J^-1.
-        '''
-        pass
+# TODO: Develop this 2 classes
+class LUDecomposition:
+    pass
+
+class LUPDecmposition:
+    pass

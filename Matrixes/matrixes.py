@@ -9,6 +9,9 @@ class Matrix:
 
     def __str__(self) -> str:
         return '\n'.join(self.components[i] for i in range(self.dim))
+
+    def __eq__(self, __o: Matrix) -> bool:
+        return self.components == __o.components
     
     @staticmethod
     def __second_order(components: list[list[float]]) -> float:
@@ -61,7 +64,7 @@ class Matrix:
         return self.adjunt_matrix().multiply_const(coeff)
 
     def adjunt_matrix(self) -> Matrix:
-        cofactormatrix = []
+        cofactormatrix: list[list[float]] = []
 
         for i in range(self.dim):
             cofactormatrix.append([])
@@ -69,9 +72,15 @@ class Matrix:
                 cofactormatrix[i].append(self.cofactor(i, j))
         return Matrix(cofactormatrix).transparence()
 
+    def conjugate(self) -> Matrix:
+        pass
+
+    def commutator(self, __o: Matrix) -> Matrix:
+        pass
+
     def sum(self, other: Matrix) -> Matrix:
         if self.dim != other.dim:
-            return None
+            raise ValueError('Invalid sizes of matrixes!')
 
         mask = [self.components[i].copy() for i in range(self.dim)]
 
@@ -85,7 +94,7 @@ class Matrix:
 
     def multiply(self, other: Matrix) -> Matrix:
         if self.dim != other.dim:
-            return None
+            raise ValueError('Invalid sizes of matrixes')
         
         result: list[list] = []
         for i in range(other.dim):
@@ -110,21 +119,38 @@ class Matrix:
         return (-1) ** (row + col) * minor.determinant()
 
     def trace(self) -> float:
-        '''
-        Method for trace of matrix
-        '''
         return sum(self.components[i][i] for i in range(self.dim))
 
     def norm(self) -> float:
-        '''
-        Method for L2 norm of matrix
-        '''
         rowsums = []
         for i in range(self.dim):
             rowsums.append(sum(self.components[i][j] ** 2 for j in range(self.dim)))
         return math.sqrt(sum(rowsums))
 
+    def is_symmetric(self) -> bool:
+        pass
+
+    def is_upper(self) -> bool:
+        pass
+
+    def is_lower(self) -> bool:
+        pass
+
+    def is_diagonal(self) -> bool:
+        pass
+
+    def is_orthogonal(self) -> bool:
+        return self == self.transparence()
+
+    def is_hermit(self) -> bool:
+        return self == self.conjugate().transparence()
+
 class Unity(Matrix):
     def __init__(self, dim: int) -> None:
         self.dim = dim
         self.components = [[1 if i == j else 0 for i in range(self.dim)] for j in range(self.dim)]
+
+class Gilbert(Matrix):
+    def __init__(self, dim: int = 1) -> None:
+        self.dim = dim
+        self.components = [[1 / (i + j + 1) for i in range(dim)] for j in range(dim)]
