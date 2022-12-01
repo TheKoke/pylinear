@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 
 class Matrix:
-    def __init__(self, ij: list[list[float]] = [[1]]) -> None:
+    def __init__(self, ij: list[list[float | complex]] = [[1]]) -> None:
         self.components = ij
         self.dim = len(self.components)
 
@@ -14,10 +14,10 @@ class Matrix:
         return self.components == __o.components
     
     @staticmethod
-    def __second_order(components: list[list[float]]) -> float:
+    def __second_order(components: list[list[float | complex]]) -> float | complex:
         return components[0][0] * components[1][1] - components[0][1] * components[1][0]
 
-    def determinant(self) -> float:
+    def determinant(self) -> float | complex:
         if self.dim == 1:
             return self.components[0][0]
 
@@ -64,7 +64,7 @@ class Matrix:
         return self.adjunt_matrix().multiply_const(coeff)
 
     def adjunt_matrix(self) -> Matrix:
-        cofactormatrix: list[list[float]] = []
+        cofactormatrix: list[list[float | complex]] = []
 
         for i in range(self.dim):
             cofactormatrix.append([])
@@ -73,10 +73,19 @@ class Matrix:
         return Matrix(cofactormatrix).transparence()
 
     def conjugate(self) -> Matrix:
-        pass
+        mask = [self.components[i].copy() for i in range(self.dim)]
+
+        for i in range(self.dim):
+            for j in range(self.dim):
+                if type(self.components[i][j]) == type(complex):
+                    mask[i][j] = self.components[i][j].conjugate()
+                else:
+                    mask[i][j] = self.components[i][j]
+
+        return Matrix(mask)
 
     def commutator(self, __o: Matrix) -> Matrix:
-        pass
+        return self.multiply(__o) - __o.multiply(self)
 
     def sum(self, other: Matrix) -> Matrix:
         if self.dim != other.dim:
@@ -106,7 +115,7 @@ class Matrix:
                 result[i].append(nextelement)
         return Matrix(result)
 
-    def multiply_const(self, const: float) -> Matrix:
+    def multiply_const(self, const: float | complex) -> Matrix:
         mask = [self.components[i].copy() for i in range(self.dim)]
 
         for i in range(len(mask)):
@@ -114,14 +123,14 @@ class Matrix:
                 mask[i][j] *= const
         return Matrix(mask)
 
-    def cofactor(self, row: int, col: int) -> float:
+    def cofactor(self, row: int, col: int) -> float | complex:
         minor = self.minor(row, col)
         return (-1) ** (row + col) * minor.determinant()
 
-    def trace(self) -> float:
+    def trace(self) -> float | complex:
         return sum(self.components[i][i] for i in range(self.dim))
 
-    def norm(self) -> float:
+    def norm(self) -> float | complex:
         rowsums = []
         for i in range(self.dim):
             rowsums.append(sum(self.components[i][j] ** 2 for j in range(self.dim)))
