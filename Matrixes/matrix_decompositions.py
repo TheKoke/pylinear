@@ -33,12 +33,12 @@ class QRDecomposition:
 
     @staticmethod
     def uppertriangular(an: list[Vector], en: list[Vector]) -> Matrix:
-        r = []
+        r: list[list] = []
         for i in range(len(en)):
             r.append([])
             for j in range(len(an)):
                 if j >= i:
-                    r[i].append(an[j].dotproduct(en[i]))
+                    r[i].append(an[j] * en[i])
                 else:
                     r[i].append(0)
         return Matrix(r)
@@ -54,7 +54,7 @@ class QRDecomposition:
         for i in range(len(vectors)):
             un = vectors[i]
             for j in range(i):
-                un = un.sum(en[j].multiply_to_constant(vectors[i].dotproduct(en[j])), subtract=True)
+                un = un - en[j].multiply_to_constant(vectors[i] * en[j])
             en.append(un.multiply_to_constant(1 / un.norm()))
         return en
 

@@ -40,5 +40,5 @@ class MMPA:
 def powers(matrix: Matrix) -> list[Matrix]:
     pows = [matrix]
     for i in range(1, 5):
-        pows.append(pows[i - 1].multiply(matrix))
+        pows.append(pows[i - 1] * matrix)
     return pows

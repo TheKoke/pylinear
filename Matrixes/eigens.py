@@ -16,14 +16,14 @@ class QRAlgorithm:
     def eigens(self) -> dict[float, Vector]:
         zero = QRDecomposition.get(self.matrix)
 
-        An = [self.matrix, zero[1].multiply(zero[0])]
+        An: list[Matrix] = [self.matrix, zero[1] * zero[0]]
         Qn = [zero[0]]
 
         while difference(An[0], An[1]) > self.epsilon:
             next = QRDecomposition.get(An[1])
 
             An[0] = An[1]
-            An[1] = next[1].multiply(next[0])
+            An[1] = next[1] * next[0]
 
             Qn.append(next[0])
 
@@ -40,7 +40,7 @@ class QRAlgorithm:
     def __build_vectors(qn: list[Matrix]) -> list[Vector]:
         p = qn[0]
         for i in range(1, len(qn)):
-            p = p.multiply(qn[i])
+            p = p * qn[i]
 
         return [Vector(p.transparence().components[i]) for i in range(len(p))]
 

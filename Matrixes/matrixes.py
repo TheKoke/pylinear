@@ -12,6 +12,15 @@ class Matrix:
 
     def __eq__(self, __o: Matrix) -> bool:
         return self.components == __o.components
+
+    def __add__(self, __o: Matrix) -> Matrix:
+        return self.__sum(__o)
+
+    def __sub__(self, __o: Matrix) -> Matrix:
+        return self.__subtract(__o)
+
+    def __mul__(self, __o: Matrix) -> Matrix:
+        return self.__multiply(__o)
     
     @staticmethod
     def __second_order(components: list[list[float | complex]]) -> float | complex:
@@ -85,9 +94,9 @@ class Matrix:
         return Matrix(mask)
 
     def commutator(self, __o: Matrix) -> Matrix:
-        return self.multiply(__o) - __o.multiply(self)
+        return self * __o - __o * self
 
-    def sum(self, other: Matrix) -> Matrix:
+    def __sum(self, other: Matrix) -> Matrix:
         if self.dim != other.dim:
             raise ValueError('Invalid sizes of matrixes!')
 
@@ -98,10 +107,10 @@ class Matrix:
                 mask[i][j] += other.components[i][j]
         return Matrix(mask)
 
-    def subtract(self, other: Matrix) -> Matrix:
-        return self.sum(other.multiply_const(-1))
+    def __subtract(self, other: Matrix) -> Matrix:
+        return self.__sum(other.multiply_const(-1))
 
-    def multiply(self, other: Matrix) -> Matrix:
+    def __multiply(self, other: Matrix) -> Matrix:
         if self.dim != other.dim:
             raise ValueError('Invalid sizes of matrixes')
         
@@ -137,16 +146,38 @@ class Matrix:
         return math.sqrt(sum(rowsums))
 
     def is_symmetric(self) -> bool:
-        pass
+        okay = True
+        for i in range(self.dim):
+            for j in range(i + 1):
+                okay = okay and self.components[i][j] == self.components[j][i]
+        return okay
 
     def is_upper(self) -> bool:
-        pass
+        okay = True
+        for i in range(self.dim):
+            for j in range(i + 1):
+                okay = okay and self.components[i][j] == 0
+                okay = okay and self.components[j][i] != 0
+
+        return okay
 
     def is_lower(self) -> bool:
-        pass
+        okay = True
+        for i in range(self.dim):
+            for j in range(i + 1):
+                okay = okay and self.components[i][j] != 0
+                okay = okay and self.components[j][i] == 0
+
+        return okay
 
     def is_diagonal(self) -> bool:
-        pass
+        okay = True
+        for i in range(self.dim):
+            for j in range(self.dim):
+                if i == j:
+                    continue
+                okay = okay and self.components[i][j] == 0
+        return okay
 
     def is_orthogonal(self) -> bool:
         return self == self.transparence()
