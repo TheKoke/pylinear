@@ -10,8 +10,22 @@
 # r = Gauss.solve(r)
 
 # print(r)
+import math
+from Vectors.vectors import Vector
+from Matrixes.matrixes import Matrix
+from Matrixes.eigens import Jacobi
 
-import os
-import sys
+example = Matrix(
+    [
+        [-17, -2, -2],
+        [-2, 14, -4], 
+        [-2, -4, 14]
+    ]
+)
 
-print(sys.path)
+jac = Jacobi(example)
+
+numeric = jac.eigens()
+
+for item in numeric:
+    print(round(item), list(map(lambda x: round(x, 3), numeric[item].components)))

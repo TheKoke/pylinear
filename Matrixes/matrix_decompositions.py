@@ -24,7 +24,7 @@ class QRDecomposition:
 
     @staticmethod
     def unitary(en: list[Vector]) -> Matrix:
-        q = []
+        q: list[list] = []
         for i in range(len(en)):
             q.append([])
             for j in range(len(en[i].components)):

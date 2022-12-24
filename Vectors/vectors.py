@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import setup
+import Vectors.setup as setup
 setup.set()
 
 import math
@@ -14,15 +14,15 @@ class Vector:
         return str(self.components)
 
     def __add__(self, __o) -> Vector:
-        return self.sum(__o)
+        return self.__sum(__o)
     
     def __sub__(self, __o) -> Vector:
-        return self.sum(__o, subtract=True)
+        return self.__sum(__o, subtract=True)
 
     def __mul__(self, __o) -> float | complex:
         return self.__dotproduct(__o)
 
-    def sum(self, other: Vector, subtract: bool = False) -> Vector:
+    def __sum(self, other: Vector, subtract: bool = False) -> Vector:
         if subtract:
             second = other.multiply_to_constant(-1)
         else:
