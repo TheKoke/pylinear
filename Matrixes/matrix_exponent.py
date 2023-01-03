@@ -37,8 +37,8 @@ class MMPA:
     def check(self) -> bool:
         pass
 
-def powers(matrix: Matrix) -> list[Matrix]:
+def powers(matrix: Matrix, count: int) -> list[Matrix]:
     pows = [matrix]
-    for i in range(1, 5):
+    for i in range(1, count):
         pows.append(pows[i - 1] * matrix)
     return pows
